@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Course {
 
+    private long id;
     public String name;
     public Person teacher;
-    private Long id;
     public int maxEnrolled;
     public List<Student> studentsEnrolled;
     public int credits;
@@ -14,7 +14,8 @@ public class Course {
     public Course() {
     }
 
-    public Course(String Name, Person Teacher, int MaxEnrolled, List StudentsEnrolled, int Credits) {
+    public Course(long Id, String Name, Person Teacher, int MaxEnrolled, List StudentsEnrolled, int Credits) {
+        id = Id;
         name = Name;
         teacher = Teacher;
         maxEnrolled = MaxEnrolled;

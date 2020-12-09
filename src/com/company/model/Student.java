@@ -4,14 +4,11 @@ import java.util.List;
 
 public class Student extends Person{
 
-    public Long studentId;
+    public long studentId;
     public int totalCredits;
     public List<Course> enrolledCourses;
 
-    public Student() {
-    }
-
-    public Student(String firstName, String lastName, Long studentId, int totalCredits, List<Course> enrolledCourses) {
+    public Student(String firstName, String lastName, long studentId, int totalCredits, List<Course> enrolledCourses) {
         super(firstName, lastName);
         this.studentId = studentId;
         this.totalCredits = totalCredits;
@@ -41,8 +38,6 @@ public class Student extends Person{
     public List<Course> getEnrolledCourses() {
         return enrolledCourses;
     }
-
-    public void deleteCourse(Course course) {}
 
     @Override
     public String toString() {

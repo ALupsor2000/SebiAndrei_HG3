@@ -49,9 +49,9 @@ public class RegistrationSystemTest {
         List<Student> l1 = new ArrayList<Student>();
         List<Student> l2 = new ArrayList<Student>();
 
-        curs1 = new Course("Baze de date", t1, 75, l1, 5);
-        curs2 = new Course("Informatica aplicata", t2, 90, l2, 6 );
-        curs3 = new Course("Arhitectura calculatoarelor", t1, 75, l2, 6);
+        curs1 = new Course(1,"Baze de date", t1, 75, l1, 5);
+        curs2 = new Course(2,"Informatica aplicata", t2, 90, l2, 6 );
+        curs3 = new Course(3,"Arhitectura calculatoarelor", t1, 75, l2, 6);
 
         List<Course> courses = new ArrayList<Course>();
         courses.add(curs1);

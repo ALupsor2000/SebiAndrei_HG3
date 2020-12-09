@@ -11,24 +11,27 @@ public class StudentRepository implements ICrudRepository<Student> {
 
     private List<Student> students;
 
-    public StudentRepository(List<Student> student) {
-        this.students = student;
+    public StudentRepository(List<Student> students) {
+        this.students = students;
     }
 
-    public void setCourse(List<Student> student) {
-        this.students = student;
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
-    public List<Student> getCourse() {
+    public List<Student> getStudents() {
         return students;
     }
 
+
     @Override
-    public Student findOne(Long id) {
-        for(Student student : students)
-            if(student.getStudentId() == id)
-                return student;
-       return null;
+    public Student findOne(long id) {
+        for(Student s : students){
+            if(s.getStudentId() == id){
+                return  s;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -38,32 +41,33 @@ public class StudentRepository implements ICrudRepository<Student> {
 
     @Override
     public Student save(Student entity) {
-        if (students.contains(entity)) {
-            return null;
+        if(students.contains(entity)){
+            return entity;
         }
-        else
-            students.add(entity);
-        return (Student) students;
+        students.add(entity);
+        return null;
     }
 
     @Override
-    public Student delete(Long id) {
-        if (students.contains(id)) {
-            return null;
+    public Student delete(long id) {
+        for(Student s : students) {
+            if (s.getStudentId() == id){
+                Student to_be_deleted = s;
+                students.remove(s);
+                return to_be_deleted;
+            }
         }
-        else
-           students.remove(id);
-        return (Student) students;
+        return null;
     }
 
     @Override
     public Student update(Student entity) {
-       Student student = findOne(entity.getStudentId());
-       if(student != null){
-           student.setEnrolledCourses(entity.getEnrolledCourses());
-           student.setTotalCredits(entity.getTotalCredits());
-           student.setFirstName(entity.getFirstName());
-           student.setLastName(entity.getLastName());
+       Student update_student = findOne(entity.getStudentId());
+       if(update_student != null){
+           update_student.setEnrolledCourses(entity.getEnrolledCourses());
+           update_student.setTotalCredits(entity.getTotalCredits());
+           update_student.setFirstName(entity.getFirstName());
+           update_student.setLastName(entity.getLastName());
            return null;
        }
        return entity;

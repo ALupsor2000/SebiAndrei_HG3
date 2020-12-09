@@ -6,8 +6,6 @@ public class Person {
     public String lastName;
 
     public Person() {
-        firstName = "";
-        lastName = "";
     }
 
     public Person(String firstName, String lastName) {

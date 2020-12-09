@@ -4,8 +4,6 @@ import com.company.controller.RegistrationSystem;
 import com.company.model.Course;
 import com.company.model.Student;
 import com.company.repository.CourseRepository;
-import com.company.repository.StudentRepository;
-import com.company.repository.TeacherRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,18 +16,21 @@ public class Menu {
     RegistrationSystem regSys;
     CourseRepository courseRepo;
 
-    public Menu(RegistrationSystem regSys) {
+    public Menu(RegistrationSystem regSys, CourseRepository courseRepo) {
         this.regSys = regSys;
+        this.courseRepo = courseRepo;
     }
 
     public void menu(){
 
         boolean opt = true;
         while(opt) {
+
+            System.out.println("");
             System.out.println("1 -> Register for course");
             System.out.println("2 -> Show all courses");
             System.out.println("3 -> Courses with free places");
-            System.out.println("4 -> Show enrolled students");
+            System.out.println("4 -> Show enrolled students for a course");
             System.out.println("5 -> Delete courses");
             System.out.println("0 -> Exit");
 
@@ -39,10 +40,10 @@ public class Menu {
             switch (option) {
                 case "1" -> {
                     System.out.println("Insert firstname: ");
-                    String firstname = scan.nextLine();
+                    String firstname = scan.next();
 
                     System.out.println("Insert lastname: ");
-                    String lastname = scan.nextLine();
+                    String lastname = scan.next();
 
                     Student stud = new Student(firstname, lastname, 111L, 15, new ArrayList<Course>());
 
@@ -54,12 +55,6 @@ public class Menu {
                 case "5" -> opt5();
                 case "0" -> opt = false;
             }
-        }
-    }
-
-    public void printCourses(List<Course> courses){
-        for (Course cours : courses) {
-            System.out.println(cours.getName());
         }
     }
 
@@ -82,8 +77,9 @@ public class Menu {
     }
 
     public void opt2(){
+
         for(int i=0; i<=regSys.getAllCourses().size()-1; i++){
-            System.out.println(regSys.getAllCourses().get(i).getName() + ' ' + regSys.getAllCourses().get(i).getCredits() + ' ' + regSys.getAllCourses().get(i).getMaxEnrolled());
+            System.out.println(regSys.getAllCourses().get(i).getName() + "   credits number: " + regSys.getAllCourses().get(i).getCredits() + "    places number: " + regSys.getAllCourses().get(i).getMaxEnrolled());
         }
     }
 
@@ -99,40 +95,35 @@ public class Menu {
 
     public void opt4(){
 
-        System.out.println("Insert course to show enrolled students: ");
-        String course = scan.next();
-        List<Student> student = new ArrayList<>(regSys.retrieveStudentsEnrolledForACourse(course));
+        System.out.println("Insert course id to show enrolled students: ");
+        long id = scan.nextLong();
 
-        for(Student s : student){
-            System.out.println(s.getFirstName() + ' ' + s.getLastName());
+        Course course = courseRepo.findOne(id);
+        if(course == null) {
+            System.out.println("The course with this id does not exist");
+        }
+        else {
+            List<Student> student = new ArrayList<>(regSys.retrieveStudentsEnrolledForACourse(course));
+            for(Student s : student) {
+                System.out.println(s.getFirstName() + ' ' + s.getLastName());
+            }
         }
     }
 
     public void opt5(){
 
-        System.out.println("Enter password: ");
-        String pass = scan.next();
-        printCourses(courseRepo.getCourse());
-        String option = scan.next();
+        System.out.println("Insert course id: ");
+        long id_course = scan.nextLong();
 
-        if(courseRepo.getCourse().stream().noneMatch(x -> x.getName().equalsIgnoreCase(option))){
-            System.out.println("Invalid course name!");
+        Course to_delete = courseRepo.findOne(id_course);
+
+        if(to_delete == null){
+            System.out.println("The course with this id does not exist");
         }
         else{
-            int courseId = 0;
-            for(int i = 0; i < courseRepo.getCourse().size(); i++){
-                if(courseRepo.getCourse().get(i).getName().equalsIgnoreCase(option)){
-                    courseId = i;
-                    break;
-                }
-            }
             //Delete the course from every student's course list
-            for(Student stud : courseRepo.getCourse().get(courseId).getStudentsEnrolled()){
-                stud.deleteCourse(courseRepo.getCourse().get(courseId));
-            }
-
-            //Delete the course
-            courseRepo.delete((long) courseId);
+            courseRepo.delete(to_delete.getId());
+            System.out.println(to_delete.getName() + " was deleted succsesfull!");
         }
     }
 }

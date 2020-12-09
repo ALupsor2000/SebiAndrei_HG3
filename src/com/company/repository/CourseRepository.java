@@ -7,63 +7,66 @@ import java.util.List;
 
 public class CourseRepository implements ICrudRepository<Course> {
 
-    private List<Course> course;
+    private List<Course> courses;
 
-    public CourseRepository(List<Course> course) {
-        this.course = course;
+    public CourseRepository(List<Course> courses) {
+        this.courses = courses;
     }
 
-    public void setCourse(List<Course> course) {
-        this.course = course;
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
-    public List<Course> getCourse() {
-        return course;
+
+    public List<Course> getCourses() {
+        return courses;
     }
+
 
     @Override
-    public Course findOne(Long id) {
-        //Course course = null;
-        for (int i=0; i<=course.size()-1;i++) {
-            if (course.get(i).getId().equals(id))
-                return course.get(i);
+    public Course findOne(long id){
+        for(Course c : courses){
+            if(c.getId() == id){
+                return  c;
+            }
         }
         return null;
     }
 
     @Override
     public Iterable findAll() {
-        return course;
+        return courses;
     }
 
     @Override
     public Course save(Course entity) {
-        if (course.contains(entity)) {
-            return null;
+        if(courses.contains(entity)){
+            return entity;
         }
-        else
-            course.add(entity);
-        return (Course) course;
+        courses.add(entity);
+        return null;
     }
 
     @Override
-    public Course delete(Long id) {
-        if (course.contains(id)) {
-            return null;
+    public Course delete(long id){
+        for(Course c : courses) {
+            if (c.getId().equals(id)) {
+                Course to_be_deleted = c;
+                courses.remove(c);
+                return to_be_deleted;
+            }
         }
-        else
-            course.remove(id);
-        return (Course) course;
+        return null;
     }
 
     @Override
-    public Course update(Course entity) {
-        Course course = findOne(entity.getId());
-        if(course != null){
-            course.setCredits(entity.getCredits());
-            course.setStudentsEnrolled(entity.getStudentsEnrolled());
-            course.setMaxEnrolled(entity.getMaxEnrolled());
-            course.setTeacher(entity.getTeacher());
-            course.setName(entity.getName());
+        public Course update(Course entity){
+        Course update_course = findOne(entity.getId());
+        if(update_course != null){
+            update_course.setCredits(entity.getCredits());
+            update_course.setStudentsEnrolled(entity.getStudentsEnrolled());
+            update_course.setMaxEnrolled(entity.getMaxEnrolled());
+            update_course.setTeacher(entity.getTeacher());
+            update_course.setName(entity.getName());
             return null;
         }
         return entity;

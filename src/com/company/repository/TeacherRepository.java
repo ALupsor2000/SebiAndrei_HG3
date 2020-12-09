@@ -22,10 +22,12 @@ public class TeacherRepository implements ICrudRepository<Teacher>{
     }
 
     @Override
-    public Teacher findOne(Long id) {
-        for(Teacher teacher : teachers)
-            if(teacher.getId().equals(id))
-                return teacher;
+    public Teacher findOne(long id) {
+        for(Teacher t : teachers){
+            if(t.getId() == id){
+                return  t;
+            }
+        }
         return null;
     }
 
@@ -36,34 +38,34 @@ public class TeacherRepository implements ICrudRepository<Teacher>{
 
     @Override
     public Teacher save(Teacher entity) {
-        if (teachers.contains(entity)) {
-            return null;
+        if(teachers.contains(entity)){
+            return entity;
         }
-        else
-            teachers.add(entity);
-        return (Teacher) teachers;
+        teachers.add(entity);
+        return null;
     }
 
     @Override
-    public Teacher delete(Long id) {
-        if (teachers.contains(id)) {
-            return null;
+    public Teacher delete(long id) {
+        for(Teacher t : teachers) {
+            if (t.getId().equals(id)) {
+                Teacher to_be_deleted = t;
+                teachers.remove(t);
+                return to_be_deleted;
+            }
         }
-        else
-            teachers.remove(id);
-        return (Teacher) teachers;
+        return null;
     }
 
     @Override
     public Teacher update(Teacher entity) {
-        Teacher teacher = findOne(entity.getId());
-        if(teacher != null) {
-            teacher.setCourses(entity.getCourses());
-            teacher.setFirstName(entity.getFirstName());
-            teacher.setLastName(entity.getLastName());
+        Teacher update_teacher = findOne(entity.getId());
+        if(update_teacher != null) {
+            update_teacher.setCourses(entity.getCourses());
+            update_teacher.setFirstName(entity.getFirstName());
+            update_teacher.setLastName(entity.getLastName());
             return null;
         }
         return entity;
     }
-
 }
